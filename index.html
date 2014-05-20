@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="css/font-awesome.min.css"/>
 <link rel="stylesheet" href="css/style.css"/>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-
+<script type="text/javascript" src="js/modernizr.js"></script>
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
 <script type="text/javascript" src="js/scripts.js"></script>
@@ -16,6 +16,7 @@
 		margin: 10px;
 	}
 
+	#doOver,
 	#takePicture{
 		background: #f85032; /* Old browsers */
 		background: -moz-linear-gradient(top,  #f85032 0%, #f16f5c 50%, #f6290c 51%, #f02f17 71%, #e73827 100%); /* FF3.6+ */
@@ -37,6 +38,19 @@
 	
 	}
 	
+	
+	#hiddenCanvas_1,
+	#hiddenCanvas_2{
+		height: 480px;
+		width: 640px;
+	}
+	
+	#hiddenCanvas_2{
+		background-image: url("crest.jpg");
+		background-position: center center;
+		background-repeat: no-repeat;
+	
+	}
 </style>
 
 </head>
@@ -53,33 +67,44 @@
 			</div>
 			
 			<div class="col">
+			<div id="show">
+				<table>
+				<tr>
+					<td><video id="video"></video></td>
+					<td><img id="preview" src="" width="640" height="480" /></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<button id="takePicture" onClick="captureImage()">Snap <i class="fa fa-camera"></i> </button>
+						<button id="doOver" onClick="retry()">Retry <i class="fa fa-history"></i> </button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div id="canvasHolder">
+						<canvas id="hiddenCanvas_1" width="640" height="480"></canvas>
+						<canvas id="hiddenCanvas_2" width="640" height="480"></canvas>
+						
+						</div>
+					</td>
+				</tr>
+				</table>
+				<div id="threshold" style="display: none;">
+					<h3>Threshold</h3>
+					<div id="slider-vertical" style="height:100px;"></div>
+				</div>
+			</div>
+
+			<div id="noShow">
+				<h1>Sorry but..</h1>
+				<p>This just wont work with your antiquated broweser...</p>
+			</div>
 			
-			<table>
-			<tr>
-				<td><video id="video"></video></td>
-				<td><img id="preview" src="" width="640" height="480" /></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<button id="takePicture" onClick="captureImage()">Snap <i class="fa fa-camera"></i> </button>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<div id="canvasHolder"></div>
-				</td>
-			</tr>
-			</table>
 			
 
 			
-			
-			
 
 			
-
-			<label>Image Data:
-			<input id="imageData" type="text" /></label>
 
 			</div>
 			
