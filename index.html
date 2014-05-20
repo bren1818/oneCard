@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" href="css/jquery-ui-1.10.4.custom.min.css"/>
+<link rel="stylesheet" href="css/font-awesome.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript" src="js/scripts.js"></script>
+
+<style>
+	.previewSnap{
+		margin: 10px;
+	}
+
+	#takePicture{
+		background: #f85032; /* Old browsers */
+		background: -moz-linear-gradient(top,  #f85032 0%, #f16f5c 50%, #f6290c 51%, #f02f17 71%, #e73827 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f85032), color-stop(50%,#f16f5c), color-stop(51%,#f6290c), color-stop(71%,#f02f17), color-stop(100%,#e73827)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #f85032 0%,#f16f5c 50%,#f6290c 51%,#f02f17 71%,#e73827 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f85032', endColorstr='#e73827',GradientType=0 ); /* IE6-9 */
+		color: #fff;
+		
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		border-radius: 4px;
+		
+		border: 1px solid #f85032; 
+		cursor: pointer;
+		padding: 10px;
+	
+	}
+	
+</style>
+
+</head>
+
+<body>
+<div class="Frame">
+
+<div class="pageContentSection Expand">
+
+	<div id="main_nav" class="wrapper">
+		<div class="pageContent one-col">
+			<div class="col">
+				<h1>One Card</h1>
+			</div>
+			
+			<div class="col">
+			
+			<table>
+			<tr>
+				<td><video id="video"></video></td>
+				<td><img id="preview" src="" width="640" height="480" /></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<button id="takePicture" onClick="captureImage()">Snap <i class="fa fa-camera"></i> </button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div id="canvasHolder"></div>
+				</td>
+			</tr>
+			</table>
+			
+
+			
+			
+			
+
+			
+
+			<label>Image Data:
+			<input id="imageData" type="text" /></label>
+
+			</div>
+			
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+<!--
+	<div id="logo" class="wrapper">
+		<div class="pageContent one-col">
+			<div class="col">
+			
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+	
+	<div id="subnav" class="wrapper">
+		<div class="pageContent one-col">
+			<div class="col">
+			
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+	
+	<div class="wrapper">
+		<div class="pageContent one-col">
+			
+			<div class="col">
+				
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+	
+	<div class="wrapper">
+		<div class="pageContent two-col">
+			<div class="col col66 col-left">
+				
+			</div>
+			<div class="col col33 col-right">
+				
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+	
+	<div id="cta" class="wrapper">
+		<div class="pageContent one-col">
+			<div class="col">
+			
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+	
+	<div class="wrapper">
+		<div class="pageContent one-col">
+			<div class="col">		
+				
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+	
+	<div class="wrapper">
+		<div class="pageContent two-col">	
+			<div class="col col50 col-left">
+				<h4></h4>
+				
+			</div>
+			<div class="col col50 col-right">
+				<h4></h4>
+				
+			</div>
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+
+
+	
+</div>
+<div class="pageContentSection">
+	<div class="wrapper" id="footer">
+		<div class="pageContent four-col">	
+			<div class="col col25 col-left"></div>
+			<div class="col col25"></div>
+			<div class="col col25"></div>
+			<div class="col col25 col-right"></div>
+			
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>	
+-->
+</div>	
+</body>
+
+</html>
