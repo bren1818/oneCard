@@ -4,7 +4,9 @@ var imagesCount = 1;
 var tolerance = 25;
 var width  = 640;
 var height = 480;
-
+var drawTools = 0;
+var brush = "redraw";
+var bs = 10;
 
 
 function init() {
@@ -14,13 +16,13 @@ function init() {
 		navigator.mozGetUserMedia ||
 		navigator.msGetUserMedia);
 		navigator.myGetMedia({ video: true }, connect, error);
-	
-		errorText = document.getElementById("noShow");
-		errorText.style.display="none";
-
+		$(function(){
+			$("#noShow").hide();
+		});
 	}else{
-		errorText = document.getElementById("show");
-		errorText.style.display="none";
+		$(function(){
+			$("#show").hide();
+		});
 	}
 	
 	$(function() {
@@ -31,16 +33,27 @@ function init() {
 		  max: 40,
 		  value: 20,
 		  slide: function( event, ui ) {
-			//$( "#amount" ).val( ui.value );
 			tolerance = ui.value;
 			reDraw();
 		  }
 		});
-		//$( "#amount" ).val( $( "#slider-vertical" ).slider( "value" ) );
-  });
-	
-	
-	
+		
+		$( "#slider-brush" ).slider({
+		  orientation: "vertical",
+		  range: "min",
+		  min: 1,
+		  max: 50,
+		  value: 10,
+		  slide: function( event, ui ) {
+			//tolerance = ui.value;
+			//	reDraw();
+			bs = ui.value;
+		  }
+		});
+		
+		
+		
+	});
 }
 
 function reDraw(){
@@ -49,7 +62,6 @@ function reDraw(){
 	//canvas.width = video.videoWidth; //can divide here
 	//canvas.height = video.videoHeight; //and here
 	var preview =   document.getElementById("preview");
-	
 	ctx.drawImage(preview, 0, 0, canvas.width, canvas.height); //draw the video
 	doCompare();
 }
@@ -62,9 +74,7 @@ function connect(stream) {
 }
 
 function error(e) { console.log(e); }
-
-addEventListener("load", init); //// call the setup
-
+init();
 
 function isSame(color1,color2){
 	if( Math.abs( color1 - color2) < tolerance ){
@@ -85,86 +95,158 @@ function retry(){
 	var can2  = document.getElementById('hiddenCanvas_2');
 	var ctx2 = can2.getContext("2d");
 	
-	
 	ctx1.clearRect ( 0 , 0 , 640 , 480 );
 	ctx2.clearRect ( 0 , 0 , 640 , 480 );
+	
+	$(function(){
+		$('#hiddenCanvas_1, #hiddenCanvas_2').hide();
+		$('#video, #preview').show();
+	
+	});
+	
+	
 }
 
 
-function doCompare(){
-//window.alert("do compare!");
-$(function(){
-	//console.log( $('#hiddenCanvas_1') );
-	var can1  = document.getElementById('hiddenCanvas_1');
-	var ctx1 = can1.getContext("2d");
-	
-	var can2  = document.getElementById('hiddenCanvas_2');
-	var ctx2 = can2.getContext("2d");
-	
-	
-	
 
 
-	
-	var imageData_1 = ctx1.getImageData(0,0,width, height);
-	var imageData_2 = ctx2.getImageData(0,0,width, height);
-	
-	for (var index=0;index<imageData_1.data.length;index+=4){
-						//red												//blue																//green
-			if( isSame(imageData_1.data[index], imageData_2.data[index]) && isSame(imageData_1.data[index + 1],imageData_2.data[index +1]) && isSame(imageData_1.data[index + 2],imageData_2.data[index +2]) ){
-				//if same delete 
-				imageData_2.data[index + 3] = 0;
+function initDrawTools(){
+	$(function(){
+		var clicking = false;
+		$('#hiddenCanvas_2').mousedown(function(){
+			clicking = true;
+		});
+
+		$(document).mouseup(function(){
+			clicking = false;
+		})
+
+		$('#hiddenCanvas_2').mousemove(function(event){
+			if(clicking == false) return;
+			position = getPosition(event);
+			
+			var x = position.x;
+			var y = position.y;
+			
+			var can2  = document.getElementById('hiddenCanvas_2');
+			var ctx2 = can2.getContext("2d");
+			
+			
+			if( brush == "redraw" ){
+				var can1  = document.getElementById('picture');
 			}else{
-				if( index < 100){
-					console.log( "different" );
-					console.log( "Red: " + imageData_1.data[index] + " vs  " +  imageData_2.data[index] +   " Green: " + imageData_1.data[index + 1] + " vs  " +  imageData_2.data[index + 1] +   " Blue : " + imageData_1.data[index + 2] + " vs  " +  imageData_2.data[index + 2] );
-					
-					
-				}
+				var can1  = document.getElementById('logo');
+				
 			}
-	}		
+			var ctx1 = can1.getContext("2d");
+			var imgData=ctx1.getImageData(x,y,bs,bs); //X,Y,W,H
+			ctx2.putImageData(imgData,x,y);
+		});
+		
+		
+		
+		
+	});
+}
+
+
+function getPosition(e) {
+
+    //this section is from http://www.quirksmode.org/js/events_properties.html
+    var targ;
+    if (!e)
+        e = window.event;
+    if (e.target)
+        targ = e.target;
+    else if (e.srcElement)
+        targ = e.srcElement;
+    if (targ.nodeType == 3) // defeat Safari bug
+        targ = targ.parentNode;
+
+    // jQuery normalizes the pageX and pageY
+    // pageX,Y are the mouse positions relative to the document
+    // offset() returns the position of the element relative to the document
+    var x = e.pageX - $(targ).offset().left;
+    var y = e.pageY - $(targ).offset().top;
+
+    return {"x": x, "y": y};
+};
+
+
+
+
+
+
+
+function doCompare(){
+	$(function(){
+		//console.log( $('#hiddenCanvas_1') );
+		var can1  = document.getElementById('hiddenCanvas_1');
+		var ctx1 = can1.getContext("2d");
+		
+		var can2  = document.getElementById('hiddenCanvas_2');
+		var ctx2 = can2.getContext("2d");
+		
+		var imageData_1 = ctx1.getImageData(0,0,width, height);
+		var imageData_2 = ctx2.getImageData(0,0,width, height);
+		
+		for (var index=0;index<imageData_1.data.length;index+=4){
+							//red												//blue																//green
+				if( isSame(imageData_1.data[index], imageData_2.data[index]) && isSame(imageData_1.data[index + 1],imageData_2.data[index +1]) && isSame(imageData_1.data[index + 2],imageData_2.data[index +2]) ){
+					//if same delete 
+					imageData_2.data[index + 3] = 0;
+				}else{
+					if( index < 100){
+						//console.log( "different" );
+						//console.log( "Red: " + imageData_1.data[index] + " vs  " +  imageData_2.data[index] +   " Green: " + imageData_1.data[index + 1] + " vs  " +  imageData_2.data[index + 1] +   " Blue : " + imageData_1.data[index + 2] + " vs  " +  imageData_2.data[index + 2] );
+					}
+				}
+		}		
 		ctx2.putImageData(imageData_2,0,0);	
-			
-			
-
+		threshold.style.display="block";
+		
+		$('#hiddenCanvas_1').hide();
+		$('#picture').hide();
+		
+	});
 	
-	threshold.style.display="block";
+	if( drawTools == 0){
+		initDrawTools();
+		drawTools = 1;
+	}
 	
-	
-});
-
-
 }
 
 
 function captureImage() {
+	var canPic = document.getElementById('picture');
+	var pictx = canPic.getContext('2d');
+	canPic.width = video.videoWidth; //can divide here
+	canPic.height = video.videoHeight; //and here
+	pictx.drawImage(video, 0, 0, canPic.width, canPic.height); //draw the video
+	
+
 	var canvas = document.getElementById('hiddenCanvas_' + imagesCount);
-		//var canvas = document.createElement('canvas');
-		///canvas.id = 'hiddenCanvas_' + imagesCount;
-		//canvas.className = 'previewSnap'; 
-	//add canvas to the body element
-		//document.body.appendChild(canvas);
-	//add canvas to #canvasHolder
-			//document.getElementById('canvasHolder').appendChild(canvas);
 	var ctx = canvas.getContext('2d');
 	canvas.width = video.videoWidth; //can divide here
 	canvas.height = video.videoHeight; //and here
 	ctx.drawImage(video, 0, 0, canvas.width, canvas.height); //draw the video
-	
-	
-	//console.log( canvas.id );
-	
-	//save canvas image as data url
 	dataURL = canvas.toDataURL();
-	//set preview image src to dataURL
 	document.getElementById('preview').src = dataURL;
-	// place the image value in the text box
-	//document.getElementById('imageData').value = dataURL;
-
+	
 	
 	
 	if( imagesCount ==2){
+		//var pic = document.getElementById('picture');
+		//var ctx = pic.getContext('2d');
+		//canvas.width = width; //can divide here
+		//canvas.height = height; //and here
+		//ctx.drawImage(video, 0, 0, width, height); //draw the video
+	
+	
 		doCompare();
+		$('#video, #preview, #takePicture').hide();
+		$('#hiddenCanvas_2, #tools').show();
 	}
 	imagesCount++;
 }

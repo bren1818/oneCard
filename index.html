@@ -49,8 +49,23 @@
 		background-image: url("crest.jpg");
 		background-position: center center;
 		background-repeat: no-repeat;
+		
 	
 	}
+	
+	#tools, 
+	#logo, #picture,
+	#hiddenCanvas_1,#hiddenCanvas_2{
+		display: none;
+	}
+	
+	#tools{ width: 100%; }
+	#tools td{
+		width: 33%;
+		text-align: left;
+		vertical-align: top;
+	}
+	
 </style>
 
 </head>
@@ -80,19 +95,43 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
-						<div id="canvasHolder">
+					<td valign="top">
 						<canvas id="hiddenCanvas_1" width="640" height="480"></canvas>
-						<canvas id="hiddenCanvas_2" width="640" height="480"></canvas>
+						<table id="tools">
+							<tr>
+								<td>
+									<div id="threshold">
+										<h3>Threshold</h3>
+										<div id="slider-vertical" style="height:100px;"></div>
+									</div>
+								</td>
+								<td>
+									<div id="brushSize">
+										<h3>Brush Size</h3>
+										<div id="slider-brush" style="height:100px;"></div>
+									</div>
+								
+								</td>
+								<td>
+									<h3>Brush Mode</h3>
+									<input type="radio" name="brushMode" value="clear">Clear <br />
+									<input type="radio" name="brushMode" value="redraw" checked>Re-Draw <br />
+								</td>
+								
+							</tr>
+						</table>
 						
-						</div>
+						
+					</td>
+					<td>
+						<canvas style="position: relative;" id="hiddenCanvas_2" width="640" height="480"></canvas>
 					</td>
 				</tr>
 				</table>
-				<div id="threshold" style="display: none;">
-					<h3>Threshold</h3>
-					<div id="slider-vertical" style="height:100px;"></div>
-				</div>
+				
+				
+				
+				
 			</div>
 
 			<div id="noShow">
@@ -100,6 +139,9 @@
 				<p>This just wont work with your antiquated broweser...</p>
 			</div>
 			
+			
+			<canvas id="logo"></canvas>
+			<canvas id="picture"></canvas>
 			
 
 			
