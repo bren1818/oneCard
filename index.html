@@ -12,6 +12,14 @@
 <script type="text/javascript" src="js/scripts.js"></script>
 
 <style>
+	body {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		user-select: none;
+		position: relative;
+	}
+
 	.previewSnap{
 		margin: 10px;
 	}
@@ -66,6 +74,22 @@
 		vertical-align: top;
 	}
 	
+	#mycursor {
+		cursor: none;
+		width: 10px;
+		height: 10px;
+		background-color: #000;
+		position: absolute;
+		display: none;
+		top: 0;
+		left: 0;
+		z-index: 10000;
+	}
+	
+	#hiddenCanvas_2{
+		
+	}
+	
 </style>
 
 </head>
@@ -74,7 +98,6 @@
 <div class="Frame">
 
 <div class="pageContentSection Expand">
-
 	<div id="main_nav" class="wrapper">
 		<div class="pageContent one-col">
 			<div class="col">
@@ -82,181 +105,67 @@
 			</div>
 			
 			<div class="col">
-			<div id="show">
-				<table>
-				<tr>
-					<td><video id="video"></video></td>
-					<td><img id="preview" src="" width="640" height="480" /></td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<button id="takePicture" onClick="captureImage()">Snap <i class="fa fa-camera"></i> </button>
-						<button id="doOver" onClick="retry()">Retry <i class="fa fa-history"></i> </button>
-					</td>
-				</tr>
-				<tr>
-					<td valign="top">
-						<canvas id="hiddenCanvas_1" width="640" height="480"></canvas>
-						<table id="tools">
-							<tr>
-								<td>
-									<div id="threshold">
-										<h3>Threshold</h3>
-										<div id="slider-vertical" style="height:100px;"></div>
-									</div>
-								</td>
-								<td>
-									<div id="brushSize">
-										<h3>Brush Size</h3>
-										<div id="slider-brush" style="height:100px;"></div>
-									</div>
+				<div id="show">
+					<table>
+						<tr>
+							<td><video id="video"></video></td>
+							<td><img id="preview" src="" width="640" height="480" /></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<button id="takePicture" onClick="captureImage()">Snap <i class="fa fa-camera"></i> </button>
+								<button id="doOver" onClick="retry()">Retry <i class="fa fa-history"></i> </button>
+							</td>
+						</tr>
+						<tr>
+							<td valign="top">
+								<canvas id="hiddenCanvas_1" width="640" height="480"></canvas>
+								<table id="tools">
+									<tr>
+										<td>
+											<div id="threshold">
+												<h3>Threshold</h3>
+												<div id="slider-vertical" style="height:100px;"></div>
+											</div>
+										</td>
+										<td>
+											<div id="brushSize">
+												<h3>Brush Size</h3>
+												<div id="slider-brush" style="height:100px;"></div>
+											</div>
+											<div id="mycursor"></div>
+										</td>
+										<td>
+											<h3>Brush Mode</h3>
+											<input type="radio" name="brushMode" value="clear">Clear <br />
+											<input type="radio" name="brushMode" value="redraw" checked>Re-Draw <br />
+										</td>
+										
+									</tr>
+								</table>
 								
-								</td>
-								<td>
-									<h3>Brush Mode</h3>
-									<input type="radio" name="brushMode" value="clear">Clear <br />
-									<input type="radio" name="brushMode" value="redraw" checked>Re-Draw <br />
-								</td>
 								
-							</tr>
-						</table>
-						
-						
-					</td>
-					<td>
-						<canvas style="position: relative;" id="hiddenCanvas_2" width="640" height="480"></canvas>
-					</td>
-				</tr>
-				</table>
-				
-				
-				
-				
-			</div>
+							</td>
+							<td>
+								<div id="cursorBox">
+									<canvas style="position: relative;" id="hiddenCanvas_2" width="640" height="480"></canvas>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
 
-			<div id="noShow">
-				<h1>Sorry but..</h1>
-				<p>This just wont work with your antiquated broweser...</p>
-			</div>
-			
-			
-			<canvas id="logo"></canvas>
-			<canvas id="picture"></canvas>
-			
-
-			
-
-			
-
-			</div>
-			
-			
-			<div class="clear"></div>
-		</div>
-	</div>
-	
-<!--
-	<div id="logo" class="wrapper">
-		<div class="pageContent one-col">
-			<div class="col">
-			
-			</div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
-	
-	
-	<div id="subnav" class="wrapper">
-		<div class="pageContent one-col">
-			<div class="col">
-			
-			</div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
-	
-	
-	<div class="wrapper">
-		<div class="pageContent one-col">
-			
-			<div class="col">
+				<div id="noShow">
+					<h1>Sorry but..</h1>
+					<p>This just wont work with your antiquated broweser...</p>
+				</div>
 				
-			</div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
-	
-	
-	<div class="wrapper">
-		<div class="pageContent two-col">
-			<div class="col col66 col-left">
-				
-			</div>
-			<div class="col col33 col-right">
-				
-			</div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
-	
-	
-	<div id="cta" class="wrapper">
-		<div class="pageContent one-col">
-			<div class="col">
-			
-			</div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
-	
-	
-	<div class="wrapper">
-		<div class="pageContent one-col">
-			<div class="col">		
-				
+				<canvas id="logo"></canvas> <!--Hidden -->
+				<canvas id="picture"></canvas> <!--Hidden -->
 			</div>
 			<div class="clear"></div>
 		</div>
 	</div>
-	
-	
-	<div class="wrapper">
-		<div class="pageContent two-col">	
-			<div class="col col50 col-left">
-				<h4></h4>
-				
-			</div>
-			<div class="col col50 col-right">
-				<h4></h4>
-				
-			</div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
-
-
-	
-</div>
-<div class="pageContentSection">
-	<div class="wrapper" id="footer">
-		<div class="pageContent four-col">	
-			<div class="col col25 col-left"></div>
-			<div class="col col25"></div>
-			<div class="col col25"></div>
-			<div class="col col25 col-right"></div>
-			
-			<div class="clear"></div>
-		</div>
-	</div>
-</div>	
--->
 </div>	
 </body>
-
 </html>

@@ -1,7 +1,7 @@
 var video;
 var dataURL;
 var imagesCount = 1;
-var tolerance = 25;
+var tolerance = 20;
 var width  = 640;
 var height = 480;
 var drawTools = 0;
@@ -45,27 +45,43 @@ function init() {
 		  max: 50,
 		  value: 10,
 		  slide: function( event, ui ) {
-			//tolerance = ui.value;
-			//	reDraw();
+			//draw a brush?
 			bs = ui.value;
+			$('#mycursor').width( ui.value );
+			$('#mycursor').height( ui.value );
 		  }
 		});
 		
+		$('input[type=radio][name=brushMode]').change(function() {
+			brush = this.value;
+		});
 		
-		
+		loadCanvas('crest.jpg');
 	});
 }
+
+function loadCanvas(dataURL) {
+	
+	var canvas = document.getElementById('logo');
+	var ctx = canvas.getContext('2d');
+
+	// load image from data url
+	var imageObj = new Image();
+	imageObj.onload = function() {
+	  ctx.drawImage(this, 80, 0); //canvas is 640 x 480, logo is 480 x 480 so x =80, y = 0
+	};
+
+	imageObj.src = dataURL;
+}
+
 
 function reDraw(){
 	var canvas = document.getElementById('hiddenCanvas_2');
 	var ctx = canvas.getContext('2d');
-	//canvas.width = video.videoWidth; //can divide here
-	//canvas.height = video.videoHeight; //and here
 	var preview =   document.getElementById("preview");
 	ctx.drawImage(preview, 0, 0, canvas.width, canvas.height); //draw the video
 	doCompare();
 }
-
 
 function connect(stream) {
 	video = document.getElementById("video");
@@ -99,16 +115,11 @@ function retry(){
 	ctx2.clearRect ( 0 , 0 , 640 , 480 );
 	
 	$(function(){
-		$('#hiddenCanvas_1, #hiddenCanvas_2').hide();
-		$('#video, #preview').show();
+		$('#hiddenCanvas_1, #hiddenCanvas_2, #tools, #doOver').hide();
+		$('#video, #preview, #takePicture').show();
 	
 	});
-	
-	
 }
-
-
-
 
 function initDrawTools(){
 	$(function(){
@@ -119,8 +130,19 @@ function initDrawTools(){
 
 		$(document).mouseup(function(){
 			clicking = false;
+			$('#mycursor').css('display','none')
 		})
 
+		
+		$('#hiddenCanvas_2').mouseout(function(){
+           	$('#mycursor').css('display','none'); 
+           	return false;
+      	});
+      	$('#hiddenCanvas_2').mouseenter(function(){
+           	$('#mycursor').css('display','block'); 
+           	return false;
+      	});
+		
 		$('#hiddenCanvas_2').mousemove(function(event){
 			if(clicking == false) return;
 			position = getPosition(event);
@@ -131,6 +153,7 @@ function initDrawTools(){
 			var can2  = document.getElementById('hiddenCanvas_2');
 			var ctx2 = can2.getContext("2d");
 			
+			$('#mycursor').css({'left' :   event.pageX + 'px', 'top' : event.pageY + 'px', 'display' : 'block'});
 			
 			if( brush == "redraw" ){
 				var can1  = document.getElementById('picture');
@@ -142,16 +165,10 @@ function initDrawTools(){
 			var imgData=ctx1.getImageData(x,y,bs,bs); //X,Y,W,H
 			ctx2.putImageData(imgData,x,y);
 		});
-		
-		
-		
-		
 	});
 }
 
-
 function getPosition(e) {
-
     //this section is from http://www.quirksmode.org/js/events_properties.html
     var targ;
     if (!e)
@@ -172,12 +189,6 @@ function getPosition(e) {
     return {"x": x, "y": y};
 };
 
-
-
-
-
-
-
 function doCompare(){
 	$(function(){
 		//console.log( $('#hiddenCanvas_1') );
@@ -191,20 +202,15 @@ function doCompare(){
 		var imageData_2 = ctx2.getImageData(0,0,width, height);
 		
 		for (var index=0;index<imageData_1.data.length;index+=4){
-							//red												//blue																//green
-				if( isSame(imageData_1.data[index], imageData_2.data[index]) && isSame(imageData_1.data[index + 1],imageData_2.data[index +1]) && isSame(imageData_1.data[index + 2],imageData_2.data[index +2]) ){
-					//if same delete 
-					imageData_2.data[index + 3] = 0;
-				}else{
-					if( index < 100){
-						//console.log( "different" );
-						//console.log( "Red: " + imageData_1.data[index] + " vs  " +  imageData_2.data[index] +   " Green: " + imageData_1.data[index + 1] + " vs  " +  imageData_2.data[index + 1] +   " Blue : " + imageData_1.data[index + 2] + " vs  " +  imageData_2.data[index + 2] );
-					}
-				}
+						//red												//blue																//green
+			if( isSame(imageData_1.data[index], imageData_2.data[index]) && isSame(imageData_1.data[index + 1],imageData_2.data[index +1]) && isSame(imageData_1.data[index + 2],imageData_2.data[index +2]) ){
+				//if same delete 
+				imageData_2.data[index + 3] = 0; //0-255 alpha
+			}
 		}		
 		ctx2.putImageData(imageData_2,0,0);	
 		threshold.style.display="block";
-		
+		$('#doOver').show();
 		$('#hiddenCanvas_1').hide();
 		$('#picture').hide();
 		
@@ -213,8 +219,7 @@ function doCompare(){
 	if( drawTools == 0){
 		initDrawTools();
 		drawTools = 1;
-	}
-	
+	}	
 }
 
 
@@ -237,21 +242,9 @@ function captureImage() {
 	
 	
 	if( imagesCount ==2){
-		//var pic = document.getElementById('picture');
-		//var ctx = pic.getContext('2d');
-		//canvas.width = width; //can divide here
-		//canvas.height = height; //and here
-		//ctx.drawImage(video, 0, 0, width, height); //draw the video
-	
-	
 		doCompare();
 		$('#video, #preview, #takePicture').hide();
 		$('#hiddenCanvas_2, #tools').show();
 	}
 	imagesCount++;
 }
-
-//Bind a click to a button to capture an image from the video stream
-//var el = document.getElementById("button");
-//el.addEventListener("click", captureImage, false);
-
