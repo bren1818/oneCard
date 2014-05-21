@@ -115,6 +115,7 @@ function retry(){
 	ctx2.clearRect ( 0 , 0 , 640 , 480 );
 	
 	$(function(){
+		$('#preview').attr('src', '');
 		$('#hiddenCanvas_1, #hiddenCanvas_2, #tools, #doOver').hide();
 		$('#video, #preview, #takePicture').show();
 	
@@ -130,16 +131,16 @@ function initDrawTools(){
 
 		$(document).mouseup(function(){
 			clicking = false;
-			$('#mycursor').css('display','none')
+		//	$('#mycursor').css('display','none')
 		})
 
 		
 		$('#hiddenCanvas_2').mouseout(function(){
-           	$('#mycursor').css('display','none'); 
+          // 	$('#mycursor').css('display','none'); 
            	return false;
       	});
       	$('#hiddenCanvas_2').mouseenter(function(){
-           	$('#mycursor').css('display','block'); 
+           //	$('#mycursor').css('display','block'); 
            	return false;
       	});
 		
@@ -147,13 +148,13 @@ function initDrawTools(){
 			if(clicking == false) return;
 			position = getPosition(event);
 			
-			var x = position.x;
-			var y = position.y;
+			var x = ( position.x - (bs/2));
+			var y = (position.y - (bs/2));
 			
 			var can2  = document.getElementById('hiddenCanvas_2');
 			var ctx2 = can2.getContext("2d");
 			
-			$('#mycursor').css({'left' :   event.pageX + 'px', 'top' : event.pageY + 'px', 'display' : 'block'});
+			//$('#mycursor').css({'left' :   event.pageX + 'px', 'top' : event.pageY + 'px', 'display' : 'block'});
 			
 			if( brush == "redraw" ){
 				var can1  = document.getElementById('picture');
