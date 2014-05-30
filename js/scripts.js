@@ -144,7 +144,7 @@ function initDrawTools(){
            	return false;
       	});
       	$('#hiddenCanvas_2').mouseenter(function(){
-           //	$('#mycursor').css('display','block'); 
+           //$('#mycursor').css('display','block'); 
            	return false;
       	});
 		
@@ -162,13 +162,25 @@ function initDrawTools(){
 			
 			if( brush == "redraw" ){
 				var can1  = document.getElementById('picture');
+				var ctx1 = can1.getContext("2d");
+				var imgData=ctx1.getImageData(x,y,bs,bs); //X,Y,W,H
+				ctx2.putImageData(imgData,x,y);
 			}else{
 				var can1  = document.getElementById('logo');
+				var ctx1 = can1.getContext("2d");
+				var imgData= ctx1.createImageData(bs,bs);
+				for (var i=0;i<imgData.data.length;i+=4){
+					imgData.data[i+0]=0;
+					imgData.data[i+1]=0;
+					imgData.data[i+2]=0;
+					imgData.data[i+3]=0;
+				}
+				//var imgData=   //ctx1.getImageData(x,y,bs,bs); //X,Y,W,H
+				ctx2.putImageData(imgData,x,y);
+				console.log( "Brush Size: " + bs + " " + x + " " + y); 
+				
 				
 			}
-			var ctx1 = can1.getContext("2d");
-			var imgData=ctx1.getImageData(x,y,bs,bs); //X,Y,W,H
-			ctx2.putImageData(imgData,x,y);
 		});
 		
 		$('#imDone').click(function(event){
@@ -180,7 +192,28 @@ function initDrawTools(){
 
 			//var img = new Image();
 			//img.src = can.toDataURL();
-			$('body .pageContentSection').append('<img src="' + can.toDataURL() + '" id="target" /><div id="preview-pane"><div class="preview-container"><img class="jcrop-preview" alt="Preview" src="' + can.toDataURL() + '" /></div></div>');
+			$('body .pageContentSection').append('<div id="CropPicContainer"><p>Position yourself in the center of the picture.</p><button id="complete">Im centered!</button><br /><img src="' + can.toDataURL() + '" id="target" /><div id="preview-pane"><div class="preview-container"><img id="prev" class="jcrop-preview" alt="Preview" src="' + can.toDataURL() + '" /></div></div></div>');
+		
+		
+			$('#complete').click(function(){
+				window.alert("do it now!");
+				$('#CropPicContainer').hide();
+				$('body .pageContentSection').append('<div id="oneCard"><canvas id="ocp"></canvas></div>');
+				
+				//load  image data into
+				
+				
+				
+				var c=document.getElementById("ocp");
+				var ctx=c.getContext("2d");
+				var img=document.getElementById("prev");
+				ctx.drawImage(img,0,0,144,180); // draw these proportions
+			
+				console.log( jcrop_api );
+				//.jcrop-holder > div get the left (b/w 0 and 160)
+				
+			
+			});
 		
 			 initJcrop();
 			 
@@ -192,8 +225,7 @@ function initDrawTools(){
 }
 
 
-function initJcrop()//{{{
-    {
+function initJcrop(){
       // Hide any interface elements that require Jcrop
       // (This is for the local user interface portion.)
       //$('.requiresjcrop').hide();
@@ -202,8 +234,7 @@ function initJcrop()//{{{
 	  
 	  
 	  // Create variables (in this scope) to hold the API and image size
-    var jcrop_api,
-        boundx,
+    var boundx,
         boundy,
 
         // Grab some information about the preview pane
@@ -256,7 +287,7 @@ function initJcrop()//{{{
 		
 	  
 	  
-    };
+};
 	
 	
 	
